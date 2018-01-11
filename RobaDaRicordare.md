@@ -53,7 +53,7 @@ classe di cui non è ancora nota l’interfaccia
 
 ![Image of Adapter](https://github.com/tankado55/Ingegneria-del-software/blob/master/Adapter.PNG)
 
-### Bridge
+#### Bridge
 
 Un bridge viene usato quando
 * Si vuole evitare di legare un’astrazione ad una sola
@@ -64,6 +64,28 @@ influente sugli utilizzatori
 
 Se ho più di una implementazione e voglio che l'utente la scelga il più tardi possibile (esempio look and feel diverso).
 
+![Image of Bridge](https://github.com/tankado55/Ingegneria-del-software/blob/master/Bridge.PNG?)
 
+#### Composite
 
-
+Un composite viene usato quando si vuole:
+* Rappresentare gerarchie di oggetti
+* Consentire di ignorare le differenze tra oggetti
+foglia e oggetti contenitore
+
+ES: le leaf sono i bottoni e i composite sono i jpanel, quando un composite chiama operation, operation viene chiamata su tutti i figli in modo ricorsivo.
+
+Containers that contain Elements, each of which could be a Container.
+
+![Image of Composite](https://github.com/tankado55/Ingegneria-del-software/blob/master/Composite.PNG)
+
+#### Visitor
+
+Represent an operation to be performed on the elements of an object structure. Visitor lets you define a new operation without changing the classes of the elements on which it operates.
+
+Do the right thing based on the type of two objects.
+
+![Image of Visitor](https://github.com/tankado55/Ingegneria-del-software/blob/master/Visitor.PNG)
+
+#### Facade
+
