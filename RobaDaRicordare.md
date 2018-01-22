@@ -66,6 +66,18 @@ Se ho più di una implementazione e voglio che l'utente la scelga il più tardi 
 
 ![Image of Bridge](https://github.com/tankado55/Ingegneria-del-software/blob/master/Bridge.PNG?)
 
+'''java
+public class BridgePatternDemo {
+   public static void main(String[] args) {
+      Shape redCircle = new Circle(100,100, 10, new RedCircle());
+      Shape greenCircle = new Circle(100,100, 10, new GreenCircle());
+
+      redCircle.draw();
+      greenCircle.draw();
+   }
+}
+'''
+
 #### Composite
 
 Consente ad oggetti utilizzatori di creare
