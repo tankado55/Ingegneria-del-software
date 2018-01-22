@@ -68,6 +68,12 @@ Se ho più di una implementazione e voglio che l'utente la scelga il più tardi 
 
 #### Composite
 
+Consente ad oggetti utilizzatori di creare
+strutture ad albero in modo che sia possibile
+trattare in modo uniforme
+* Oggetti foglia
+* Oggetti contenitore
+
 Un composite viene usato quando si vuole:
 * Rappresentare gerarchie di oggetti
 * Consentire di ignorare le differenze tra oggetti
@@ -144,7 +150,7 @@ oggetto venga creata nel sistema
 
 Problem: If an application is to be portable, it needs to encapsulate platform dependencies. These "platforms" might include: windowing system, operating system, database, etc. Too often, this encapsulation is not engineered in advance, and lots of #ifdef case statements with options for all currently supported platforms begin to procreate like rabbits throughout the code.
 
-Questo codice disaccoppia il client code scritto nell'interfaccia dal codice della creazione dell'oggetto scritto nelle sottoclassi.
+Questo codice rende indipendente il codice client scritto nell'interfaccia dal codice che si occupa della creazione dell'oggetto, scritto nelle sottoclassi.
 
 Definizione Factory pattern: Fornisce un interfaccia per creare oggetti, ma lascia alle sottoclassi il compito di decidere quale classe istanziare.
 
@@ -152,7 +158,7 @@ Definizione Factory pattern: Fornisce un interfaccia per creare oggetti, ma lasc
 
 ![Image of Factory4](https://github.com/tankado55/Ingegneria-del-software/blob/master/Factory4.PNG?raw=true)
 
-Un abstract factory fornisce un interfaccia per la creazione di una famiglia di di prodotti(ingredienti per pizza), passando varie factory avremo varie implementazioni ma il client code rimane lo stesso.
+Un abstract factory fornisce un interfaccia per la creazione di una famiglia di di prodotti(ingredienti per pizza), passando varie factory come parametro del costruttore dell'interfaccia concreta avremo varie implementazioni ma il codice del client rimane lo stesso.
 
 ![Image of Factory5](https://github.com/tankado55/Ingegneria-del-software/blob/master/Factory5.PNG?raw=true)
 
@@ -177,6 +183,12 @@ Rimpiazzo le new con una chiamata  prototype.clone();
 #### Singleton
 
 ![Image of Singleton](https://github.com/tankado55/Ingegneria-del-software/blob/master/Singleton.PNG?)
+
+Il costruttore è private quindi solo il codice della classe può chiamarlo!
+
+Il Singleton Pattern assicura che una classe abbia solamente un istanza, e fornisce un punto di accesso globale.
+
+A differenza di una variabile globale abbiamo il vantaggio di avere una lazy instantiation.
 
 ### Pattern Comportamentali
 
@@ -205,7 +217,21 @@ La computazione del metodo vero a proprio può avvenire anche molto dopo aver cr
 
 * Logging, aggiungendo a command altri metodi come store() e load(), oppure per implementare una transazione (o tutto o niente)
 
+#### Iterator
 
+Implementa un meccanismo di accesso a
+oggetti aggregati in modo sequenziale
+* Un iteratore naviga sequenzialmente un oggetto
+aggregato
+
+Un iteratore viene utilizzato:
+* Per accedere al contenuto di un oggetto aggregato
+in modo indipendente da come i componenti sono
+memorizzati nell’oggetto aggregato
+* Quando si vuole offrire diverse politiche di
+attraversamento di un oggetto aggregato
+
+![Image of Iterator](https://github.com/tankado55/Ingegneria-del-software/blob/master/Iterator.PNG)
 
 
 
