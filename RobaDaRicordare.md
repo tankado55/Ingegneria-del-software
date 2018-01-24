@@ -263,6 +263,22 @@ RMI STUB: è il client helper (l'oggetto proxy), RMI SKELETON: è il service hel
 
 ```java
 try {
+			LocateRegistry.createRegistry(2000);
+			
+			System.out.println("Registry attivato");
+			
+			Object mutex = new Object();
+			
+			synchronized (mutex) {
+				mutex.wait();
+			}
+		} catch (Throwable throwable) {
+			throwable.printStackTrace();
+		}
+```	  
+
+```java
+try {
 	Registry registry = LocateRegistry.getRegistry("127.0.0.1", 2000);
 
 	Sommatore s1 = new SommatoreImpl();
