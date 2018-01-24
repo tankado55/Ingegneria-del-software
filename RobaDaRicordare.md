@@ -69,10 +69,10 @@ Se ho più di una implementazione e voglio che l'utente la scelga il più tardi 
 ```java
 public class BridgePatternDemo {
    public static void main(String[] args) {
-      Shape redCircle = new Circle(100,100, 10, new RedCircle());
+      Shape redCircle = new Circle(100,100, 10, new RedCircle());  // il RedCircle è un implementazione concreta
       Shape greenCircle = new Circle(100,100, 10, new GreenCircle());
 
-      redCircle.draw();
+      redCircle.draw();    //draw andrà a chiamare la funzione dell'implementazione concreta passando lo stato interno	
       greenCircle.draw();
    }
 }
@@ -160,11 +160,13 @@ oggetto venga creata nel sistema
 
 #### Factory method e Abstract Factory
 
+Definizione Factory pattern: Fornisce un interfaccia per creare oggetti, ma lascia alle sottoclassi il compito di decidere quale classe istanziare.
+
 Problem: If an application is to be portable, it needs to encapsulate platform dependencies. These "platforms" might include: windowing system, operating system, database, etc. Too often, this encapsulation is not engineered in advance, and lots of #ifdef case statements with options for all currently supported platforms begin to procreate like rabbits throughout the code.
 
 Questo codice rende indipendente il codice client scritto nell'interfaccia dal codice che si occupa della creazione dell'oggetto, scritto nelle sottoclassi.
 
-Definizione Factory pattern: Fornisce un interfaccia per creare oggetti, ma lascia alle sottoclassi il compito di decidere quale classe istanziare.
+
 
 ![Image of Factory3](https://github.com/tankado55/Ingegneria-del-software/blob/master/Factory3.png?raw=true)
 
@@ -245,5 +247,93 @@ attraversamento di un oggetto aggregato
 
 ![Image of Iterator](https://github.com/tankado55/Ingegneria-del-software/blob/master/Iterator.PNG)
 
+# Java RMI
 
+Tutti gli oggetti remoti estendono l'interfaccia Remote e tutti i loro metodi throws RemoteException.
 
+RMI STUB: è il client helper (l'oggetto proxy), RMI SKELETON: è il service helper che sta sul server.
+
+## Come implementare il servizio remoto
+
+1. Creare un interfaccia remota (mettere extends Remote all'interfaccia), definisce i metodi che il client può chiamare in modo remoto, tutti gli argomenti e i tipi di ritorno devono essere serializabili o primitivi.
+
+2. Creare l'implementazione dei metodi remoti.
+
+### Codice lato server
+
+```java
+try {
+	Registry registry = LocateRegistry.getRegistry("127.0.0.1", 2000);
+
+	Sommatore s1 = new SommatoreImpl();
+			
+	Remote esportato1 = UnicastRemoteObject.exportObject(s1, 0); //esportato1 è lo STUB
+						
+	registry.rebind("oggetto1", esportato1);
+			
+	System.out.println("Oggetto 1 disponibile");		
+			
+			
+     } catch (Throwable throwable) {
+	     throwable.printStackTrace();
+     }
+```	  
+
+### Codice lato client
+
+```java
+
+try {
+	Registry registry = LocateRegistry.getRegistry("127.0.0.1", 2000);
+			
+	GestorePunti gestorePunti2 = (GestorePunti)registry.lookup("oggetto2"); //mi ritorna lo STUB
+
+	if(gestorePunti2 != null) 
+		Punto s = gestorePunti2.puntoMedio(new Punto(3, 4), new Punto(5, 6));
+							
+								
+	} catch (Throwable throwable) {
+			throwable.printStackTrace();
+	}
+```
+
+# JDBC
+
+```java
+public static void main(String[] args) {
+		try {
+			MemoriaOggetti memoria = new MemoriaOggettiDerby("jdbc:derby://localhost/Oggetti");
+		} catch (Throwable throwable) {
+			throwable.printStackTrace();
+		}
+	}
+```
+
+```java
+try (
+			Connection connessione = DriverManager.getConnection(url);
+			PreparedStatement insert = connessione.prepareStatement("INSERT INTO OGGETTI(CLASSE, DATI) VALUES (?, ?)", RETURN_GENERATED_KEYS);
+			PreparedStatement update = connessione.prepareStatement("UPDATE OGGETTI SET DATI=? WHERE ID=?");
+		) {
+			connessione.setAutoCommit(false);
+
+			insert.setString(1, classe.getName());
+
+			insert.setBlob(2, new SerialBlob(new byte[0]));
+				
+			insert.execute();
+
+			ResultSet chiavi = insert.getGeneratedKeys();
+			
+			chiavi.next();
+
+			int id = chiavi.getInt(1);
+
+			chiavi.close();
+			
+			connessione.commit();
+			
+		} catch(Throwable throwable) {			
+			throw new PersistenteException(throwable);
+		}
+```
