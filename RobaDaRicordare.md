@@ -247,6 +247,63 @@ attraversamento di un oggetto aggregato
 
 ![Image of Iterator](https://github.com/tankado55/Ingegneria-del-software/blob/master/Iterator.PNG)
 
+# Serializzazione
+
+Se voglio che la mia classe possa essere serializzata: implements Serializable, l'interfaccia non ha alcun metodo da implementare.
+
+Se voglio che una variabile di istanza non venga serializzata bisogna segnarla "transient"!
+
+Da mettere dentro la classe:
+private static final long serialVersionUID = 20171114;
+
+```java
+private boolean salva() {
+		try (
+			FileOutputStream fileOutputStream = new FileOutputStream("contatore.ser");
+			
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+		) {
+			objectOutputStream.writeObject(this);
+
+			return true;
+		} catch (Throwable throwable) {
+			throwable.printStackTrace();
+			
+			return false;
+		}
+	}
+```
+
+# Socket
+
+Una socket è un oggetto che rappresenta una connessione tra 2 macchine.
+
+Per leggere:
+1. Crea una connessione socket: Socket chatSocket = new Socket("127.0.0.1", 5000);
+2. Crea in InputStreamReader concatenato alla socket: InputStreamReader stream = new InputStreamReader(chatSocket.getInputStream();
+3. Crea un BufferedReader e leggi: BufferedReader reader = new BufferedReader(stream);  String message = reader.readline();
+
+Per scrivere:
+1. Crea una connessione socket: Socket chatSocket = new Socket("127.0.0.1", 5000);
+2. Crea un Print Writer concatenato alla socket: PrintWriter writer = new PrintWriter(chatSocket.getOutputStream());
+3. Scrivi qualcosa: writer.println("messaggio da inviare");
+
+## lato server
+
+1. Crea una socketserver: ServerSocket serversocket = new ServerSocket(4242);
+2. Crea una nuova socket per counicare con il client: Socket socket = serversocket.accept();
+
+Per non piantare il server dopo che fa un accept:
+```java
+for(;;) {
+				Socket socket = serverSocket.accept();
+
+				Servant servant = new Servant(this, socket);
+				
+				new Thread(servant).start();
+			}
+
+```
 # Java RMI
 
 Tutti gli oggetti remoti estendono l'interfaccia Remote e tutti i loro metodi throws RemoteException.
@@ -353,3 +410,8 @@ try (
 			throw new PersistenteException(throwable);
 		}
 ```
+
+# Multi-Thread
+
+1. implements Runnable e implementare il metodo run()
+2. Instanziare un oggetto Thread e chiamare start(), ad esempio: new Thread(mioOggetto).start()
