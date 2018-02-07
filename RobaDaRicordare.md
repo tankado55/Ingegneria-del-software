@@ -274,6 +274,20 @@ private boolean salva() {
 	}
 ```
 
+Se voglio salvare l'oggetto nel db:
+
+```java
+protected byte[] serializza(Serializable oggetto) throws IOException {
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+			
+		objectOutputStream.writeObject(oggetto);
+			
+		return byteArrayOutputStream.toByteArray();
+	}
+```
+
 # Socket
 
 Una socket è un oggetto che rappresenta una connessione tra 2 macchine.
