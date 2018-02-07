@@ -274,7 +274,7 @@ private boolean salva() {
 	}
 ```
 
-Se voglio salvare l'oggetto nel db:
+Se voglio salvare l'oggetto nel db, quello che ritorna la seguente funzione lo etto in un SerialBlob e lo metto nel DB
 
 ```java
 protected byte[] serializza(Serializable oggetto) throws IOException {
@@ -293,14 +293,14 @@ protected byte[] serializza(Serializable oggetto) throws IOException {
 Una socket è un oggetto che rappresenta una connessione tra 2 macchine.
 
 Per leggere:
-1. Crea una connessione socket: Socket chatSocket = new Socket("127.0.0.1", 5000);
-2. Crea in InputStreamReader concatenato alla socket: InputStreamReader stream = new InputStreamReader(chatSocket.getInputStream();
-3. Crea un BufferedReader e leggi: BufferedReader reader = new BufferedReader(stream);  String message = reader.readline();
+1. Crea una connessione socket: `Socket chatSocket = new Socket("127.0.0.1", 5000);`
+2. Crea in InputStreamReader concatenato alla socket: `InputStreamReader stream = new InputStreamReader(chatSocket.getInputStream();`
+3. Crea un BufferedReader e leggi: `BufferedReader reader = new BufferedReader(stream);  String message = reader.readline();`
 
 Per scrivere:
-1. Crea una connessione socket: Socket chatSocket = new Socket("127.0.0.1", 5000);
-2. Crea un Print Writer concatenato alla socket: PrintWriter writer = new PrintWriter(chatSocket.getOutputStream());
-3. Scrivi qualcosa: writer.println("messaggio da inviare");
+1. Crea una connessione socket: `Socket chatSocket = new Socket("127.0.0.1", 5000);`
+2. Crea un Print Writer concatenato alla socket: `PrintWriter writer = new PrintWriter(chatSocket.getOutputStream());`
+3. Scrivi qualcosa: `writer.println("messaggio da inviare");`
 
 ## lato server
 
@@ -429,3 +429,45 @@ try (
 
 1. implements Runnable e implementare il metodo run()
 2. Instanziare un oggetto Thread e chiamare start(), ad esempio: new Thread(mioOggetto).start()
+
+# Servlet
+
+```java
+@SuppressWarnings("serial")
+@WebServlet("/stato")
+public class StatoSensori extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
+			Class.forName("org.apache.derby.jdbc.ClientDriver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		try (
+				
+				Connection con = DriverManager.getConnection("jdbc:derby://localhost/esame");
+				PreparedStatement select = con.prepareStatement("SELECT * FROM STATO");
+				ResultSet righeTabella = select.executeQuery();   //la resultset va chiusa!
+			) {
+			
+			HttpSession session = request.getSession();
+
+			session.setAttribute("righeTabella", righeTabella);
+			
+			request.getRequestDispatcher("visualizza_tabella.jsp").forward(request, response);
+			
+			
+		} catch (Throwable throwable) {
+			throwable.printStackTrace();
+		}
+		
+		
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+}
+```
